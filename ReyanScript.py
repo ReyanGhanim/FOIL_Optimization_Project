@@ -1,11 +1,17 @@
 import numpy as np
 from scipy.optimize import least_squares
+from scipy.io import loadmat 
+import csv
+
 
 
 def fitMESI_TR(T, Ksq, Beta=None):
     DEBUG = False  # Flag to enable verbose output while debugging
 
     # Check that data and exposure times have the same dimensions
+
+    
+
     n = len(T)
     A = Ksq.shape
     if n != A[-1]:
@@ -83,6 +89,19 @@ def mesi_fun(params, param):
     beta, rho, tau_c, nu = params
     T = param['T']
     return beta * (1 + (T / tau_c) ** (2 * nu)) ** (-rho / nu)
+
+x = []
+
+with open('Cropped_Data_Labels.csv', 'r', encoding="latin-1") as file1:
+    with open('Cropped_Data.csv', 'r', encoding="latin-1") as file2:
+        reader1 = csv.reader(file1)
+        reader2 = csv.reader(file2)
+
+        for row1, row2 in zip(reader1, reader2):
+            x.append((row1, row2))
+
+print(x)
+fitMESI_TR(x, )
 
 # Example usage:
 # fitted, R2 = fitMESI_TR(T, Ksq)
